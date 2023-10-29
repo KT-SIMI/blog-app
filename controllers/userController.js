@@ -67,7 +67,7 @@ exports.signin = catchAsync(async (req, res, next) => {
 
   const payload = { userId: user._id };
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "400h",
+    expiresIn: "1h",
   });
   req.session.token = token;
 
@@ -138,7 +138,7 @@ exports.getBlog = catchAsync(async (req, res, next) => {
         readingCount: -1,
         timeStamp: -1,
       }
-    ); // check logic today
+    );
 
     res
       .status(200)
@@ -151,7 +151,14 @@ exports.getBlog = catchAsync(async (req, res, next) => {
     timeStamp: -1,
   });
 
-  res.status(200).json({ status: "success", msg: "Blogs gotten", data: q });
+  res
+    .status(200)
+    .json({
+      status: "success",
+      msg: "Blogs gotten",
+      totalPages: Math.ceil(numberOfBlogs / perPage),
+      data: q,
+    });
 });
 
 exports.getSingleBlog = catchAsync(async (req, res, next) => {
@@ -161,12 +168,9 @@ exports.getSingleBlog = catchAsync(async (req, res, next) => {
 
   const q = await Blog.findOne({ _id: BlogId });
 
-  res
-    .status(200)
-    .json({
-      status: "success",
-      msg: "Gotten a blog",
-      totalPages: Math.ceil(numberOfBlogs / perPage),
-      data: q,
-    });
+  res.status(200).json({
+    status: "success",
+    msg: "Gotten a blog",
+    data: q,
+  });
 });
