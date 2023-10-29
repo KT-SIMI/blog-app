@@ -99,6 +99,11 @@ exports.signin = catchAsync(async (req, res, next) => {
 exports.getBlog = catchAsync(async (req, res, next) => {
   const author = req.body.author;
   const tags = req.body.tags;
+  const blogPerPage = 20;
+  const page = parseInt(req.query.page) || 1;
+
+  const numberOfBlogs = await Blog.countDocuments();
+  const skip = (page - 1) * blogPerPage;
   if (author) {
     const authorExists = await User.findOne({ author, state: "published" });
 
@@ -107,11 +112,14 @@ exports.getBlog = catchAsync(async (req, res, next) => {
         .status(401)
         .json({ status: "success", msg: "Author does not exist" });
 
-    const q = await Blog.find({ author: author, state: "published" }).sort({
-      readCount: -1,
-      readingCount: -1,
-      timeStamp: -1,
-    });
+    const q = await Blog.find({ author: author, state: "published" })
+      .sort({
+        readCount: -1,
+        readingCount: -1,
+        timeStamp: -1,
+      })
+      .skip(skip)
+      .limit(blogPerPage);
 
     return res
       .status(200)
@@ -147,11 +155,18 @@ exports.getBlog = catchAsync(async (req, res, next) => {
 });
 
 exports.getSingleBlog = catchAsync(async (req, res, next) => {
-  const BlogId = req.body.BlogId;g
+  const BlogId = req.body.BlogId;
 
   await Blog.updateOne({ _id: BlogId }, { $inc: { readCount: 1 } });
 
   const q = await Blog.findOne({ _id: BlogId });
 
-  res.status(200).json({ status: "success", msg: "Gotten a blog", data: q });
+  res
+    .status(200)
+    .json({
+      status: "success",
+      msg: "Gotten a blog",
+      totalPages: Math.ceil(numberOfBlogs / perPage),
+      data: q,
+    });
 });
