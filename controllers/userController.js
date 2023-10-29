@@ -93,7 +93,7 @@ exports.getTags = catchAsync(async (req, res, next) => {
 
   res
     .status(200)
-    .json({ status: "success", msg: "Tags Gotten", data: q ?? null });
+    .json({ status: "success", msg: "Tags Gotten", data: q });
 });
 
 exports.getBlog = catchAsync(async (req, res, next) => {
@@ -143,7 +143,7 @@ exports.getBlog = catchAsync(async (req, res, next) => {
 
   res
     .status(200)
-    .json({ status: "success", msg: "Blogs gotten", data: q ?? null });
+    .json({ status: "success", msg: "Blogs gotten", data: q });
 });
 
 exports.getSingleBlog = catchAsync(async (req, res, next) => {});
