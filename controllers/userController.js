@@ -146,4 +146,10 @@ exports.getBlog = catchAsync(async (req, res, next) => {
     .json({ status: "success", msg: "Blogs gotten", data: q });
 });
 
-exports.getSingleBlog = catchAsync(async (req, res, next) => {});
+exports.getSingleBlog = catchAsync(async (req, res, next) => {
+  const BlogId = req.body.BlogId
+
+  await Blog.updateOne({ _id: BlogId }, { $inc: { readCount: 1 } })
+
+  const q = await Blog.findOne({ _id: BlogId })
+});
