@@ -76,25 +76,25 @@ exports.signin = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: "success", msg: "Signed in", data: q });
 });
 
-exports.createTag = catchAsync(async (req, res, next) => {
-  const tag = new Tag({
-    name: req.body.name,
-  });
+// exports.createTag = catchAsync(async (req, res, next) => {
+//   const tag = new Tag({
+//     name: req.body.name,
+//   });
 
-  await tag.save();
+//   await tag.save();
 
-  const q = await Tag.findOne({ _id: tag._id });
+//   const q = await Tag.findOne({ _id: tag._id });
 
-  res.status(200).json({ status: "success", msg: "Tag created", data: q });
-});
+//   res.status(200).json({ status: "success", msg: "Tag created", data: q });
+// });
 
-exports.getTags = catchAsync(async (req, res, next) => {
-  const q = await Tag.find();
+// exports.getTags = catchAsync(async (req, res, next) => {
+//   const q = await Tag.find();
 
-  res
-    .status(200)
-    .json({ status: "success", msg: "Tags Gotten", data: q });
-});
+//   res
+//     .status(200)
+//     .json({ status: "success", msg: "Tags Gotten", data: q });
+// });
 
 exports.getBlog = catchAsync(async (req, res, next) => {
   const author = req.body.author;
@@ -124,11 +124,13 @@ exports.getBlog = catchAsync(async (req, res, next) => {
         .status(404)
         .json({ status: "success", msg: "Tag does not exist" });
 
-    const q = await Blog.find({ $in: { tags: tags }, state: "published" }).sort({
-      readCount: -1,
-      readingCount: -1,
-      timeStamp: -1,
-    }); // check logic today
+    const q = await Blog.find({ $in: { tags: tags }, state: "published" }).sort(
+      {
+        readCount: -1,
+        readingCount: -1,
+        timeStamp: -1,
+      }
+    ); // check logic today
 
     res
       .status(200)
@@ -141,15 +143,15 @@ exports.getBlog = catchAsync(async (req, res, next) => {
     timeStamp: -1,
   });
 
-  res
-    .status(200)
-    .json({ status: "success", msg: "Blogs gotten", data: q });
+  res.status(200).json({ status: "success", msg: "Blogs gotten", data: q });
 });
 
 exports.getSingleBlog = catchAsync(async (req, res, next) => {
-  const BlogId = req.body.BlogId
+  const BlogId = req.body.BlogId;g
 
-  await Blog.updateOne({ _id: BlogId }, { $inc: { readCount: 1 } })
+  await Blog.updateOne({ _id: BlogId }, { $inc: { readCount: 1 } });
 
-  const q = await Blog.findOne({ _id: BlogId })
+  const q = await Blog.findOne({ _id: BlogId });
+
+  res.status(200).json({ status: "success", msg: "Gotten a blog", data: q });
 });
