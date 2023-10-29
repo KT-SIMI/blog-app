@@ -14,18 +14,17 @@ exports.getProfile = catchAsync(async (req, res, next) => {
 exports.createBlog = catchAsync(async (req, res, next) => {
   const title = req.body.title;
   const tags = req.body.tags;
-  const body = req.body.body
-  
-  const words = body.split(' ')
+  const body = req.body.body;
+
+  const words = body.split(" ");
   const wordNumber = words.length;
-  const readingTime = Math.cell(wordNumber / 30)
+  const readingTime = Math.cell(wordNumber / 30);
   const titleExists = await Blog.findOne({ title: title });
 
-  if (titleExists) 
+  if (titleExists)
     return res
       .status(401)
       .json({ status: "error", msg: "Name already exists" });
-    
 
   const blog = new Blog({
     title: title,
@@ -33,7 +32,7 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     author: req.user.userId,
     tags: tags,
     body: body,
-    readingTime: readingTime
+    readingTime: readingTime,
   });
 
   for (let i = 0; i < tags.length; i++) {
@@ -60,12 +59,14 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: "success", msg: "Blog created", data: q });
 });
 
-exports.changeState = catchAsync( async (req, res, next) => {
-  const blogId = req.user.blogId
-  await Blog.updateOne({ _id: blogId }, { state: "published" })
-  const q = await Blog.findOne({ _id: blogId })
-  res.status(200).json({ })
-})
+exports.changeBlogState = catchAsync(async (req, res, next) => {
+  const blogId = req.user.blogId;
+  await Blog.updateOne({ _id: blogId }, { state: "published" });
+  const q = await Blog.findOne({ _id: blogId });
+  res
+    .status(200)
+    .json({ status: "success", msg: "Changed Blog State", data: q });
+});
 
 exports.updateBlog = catchAsync(async (req, res, next) => {
   const blogId = req.body.blogId;
@@ -76,43 +77,52 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
 
   const titleExists = await Blog.findOne({ title });
 
-  const words = body.split(' ')
+  const words = body.split(" ");
   const wordNumber = words.length;
-  const readingTime = Math.cell(wordNumber / 30)
+  const readingTime = Math.cell(wordNumber / 30);
 
   if (titleExists)
     return res
       .status(401)
       .json({ status: "error", msg: "Title already exists" });
 
-  await Blog.updateOne({ _id: blogId}, {
-    title,
-    $push: { tags: tags },
-    description,
-    body,
-    readingTime,
-  })
+  await Blog.updateOne(
+    { _id: blogId },
+    {
+      title,
+      $push: { tags: tags },
+      description,
+      body,
+      readingTime,
+    }
+  );
 
-  const q = await Blog.findOne({ _id: blogId })
+  const q = await Blog.findOne({ _id: blogId });
 
-  res.status(200).json({ status: 'sucess', msg: 'Updated Blog', data: q })
+  res.status(200).json({ status: "sucess", msg: "Updated Blog", data: q });
 });
 
-exports.deleteBlog = catchAsync( async (req, res, next) => {
-    const blogId = req.body.blogId
+exports.deleteBlog = catchAsync(async (req, res, next) => {
+  const blogId = req.body.blogId;
 
-    const k = await  Blog.findOne({ _id: blogId })
-    const tag = await Tag.find({ $in: { blogs: blogId }}, {})
+  const k = await Blog.findOne({ _id: blogId });
+  const tag = await Tag.find({ $in: { blogs: blogId } }, {});
 
-    for (i = 0; i < tag.length; i++) {
-        const eachTag = tag[i]
+  for (i = 0; i < tag.length; i++) {
+    const eachTag = tag[i];
 
-        await Tag.updateOne({ _id: eachTag._id }, {
-            $pull: { blogs: blogId }
-        })
+    await Tag.updateOne(
+      { _id: eachTag._id },
+      {
+        $pull: { blogs: blogId },
+      }
+    );
+  }
+
+  await User.updateOne(
+    { _id: k.author },
+    {
+      $pull: { blogs: blogId },
     }
-
-    await User.updateOne({ _id: k.author }, {
-        $pull: { blogs: blogId }
-    })
-})
+  );
+});
