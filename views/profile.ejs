@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog App | Home</title>
+    <title>Blog App | Write Blog</title>
     <link rel="icon" type="image/x-icon" href="favicon.svg" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <nav class="navbar">
       <div class="navbar__container">
-        <a href="/" class="navbar__logo">
+        <a href="/homepage" class="navbar__logo">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" class="bi bi-pen" viewBox="0 0 16 16">
             <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
           </svg>
@@ -36,69 +36,39 @@
           </li> -->
 
           <li class="navbar__btn">
-            <a href="/login" class="button">Log Out</a>
+            <a href="/logout" class="button">Log Out</a>
           </li>
         </ul>
       </div>
     </nav>
-    <h1 id="home_header">Home</h1>
+    <h1 id="home_header">Your Profile</h1>
     <header>
       <p>Hello, <%= user.firstname %></p>
-      <div class="header_links">
-      <a href="#blogs" onClick="displayTab('blogs')">Blogs</a>
-      <a href="#tags" onClick="displayTab('tags')">Tags</a>
-      <a href="#authors" onClick="displayTab('authors')">Authors</a>
-    </div>
     </header>
-    <div class="main_container">
-      <div id="blogs" class="main displayed">
-        <h1>Blogs</h1>
-        <ul>
-          <% blogs.forEach(blog => { %>
-            <li>
-              <a href="/getSingleBlog/<%= blog._id %>" class="blogs">
-                <h3><%= blog.title %></h3>
-              
-               <p style="font-weight: 400;
-                opacity: 0.7;">
-                Description: <%= blog.description %>
-                <br>
-                Written by: <%= blog.authorName %>
-              </p> 
-              </a>
-            </li>
-      
-          <% }); %>
-        </ul>
-      </div>
+    <div class="profile_container">
+      <main class="profile">
+        <p class="profile_paragraph">Fullname: <%= user.firstname %>
+          <%= user.lastname %></p>
+          <p class="profile_paragraph">Email: <%= user.email %></p>
 
-      <div id="tags" class="main">
-        <h1>Tags</h1>
-        <ul>
-          <% tags.forEach(tag => { %>
-            <li>
-              <a href="/getTag/<%= tag._id %>" tagId="<%= tag._id %>">
-              <%= tag.name %>
-            </a>
-            </li>
-          <% }); %>
-        </ul>
-      </div>
-
-      <div id="authors" class="main">
-        <h1>Authors</h1>
-        <ul>
-          <% authors.forEach(author => { %>
-            <li>
-              <a href="/getSingleAuthor/<%= author._id %>" authorId="<%= author._id %>">
-              <%= author.firstname, %>
-              <%= author.lastname %>
-            </a>
-            </li>
-          <% }); %>
-        </ul>
-      </div>
+          <ul>
+            <h2>Blogs</h2>
+            <% blogs.forEach(blog => { %>
+              <li class="li">
+                <a href="/getSingleBlog/<%= blog._id %>">
+                  <h3><%= blog.title %></h3>
+                
+                 <p style="font-weight: 400;
+                  opacity: 0.7;">
+                 <%= blog.description %>
+                </p> 
+                </a>
+              </li>
+        
+            <% }); %>
+          </ul>
+      </main>
     </div>
     <script src="script.js"></script>
-  </body>
-</html>
+    </body>
+    </html>

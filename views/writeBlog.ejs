@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog App | Home</title>
+    <title>Blog App | Write Blog</title>
     <link rel="icon" type="image/x-icon" href="favicon.svg" />
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -36,69 +36,36 @@
           </li> -->
 
           <li class="navbar__btn">
-            <a href="/login" class="button">Log Out</a>
+            <a href="/" class="button">Log Out</a>
           </li>
         </ul>
       </div>
     </nav>
-    <h1 id="home_header">Home</h1>
     <header>
-      <p>Hello, <%= user.firstname %></p>
-      <div class="header_links">
-      <a href="#blogs" onClick="displayTab('blogs')">Blogs</a>
-      <a href="#tags" onClick="displayTab('tags')">Tags</a>
-      <a href="#authors" onClick="displayTab('authors')">Authors</a>
-    </div>
+        <h1>Write Blog</h1>
     </header>
-    <div class="main_container">
-      <div id="blogs" class="main displayed">
-        <h1>Blogs</h1>
-        <ul>
-          <% blogs.forEach(blog => { %>
-            <li>
-              <a href="/getSingleBlog/<%= blog._id %>" class="blogs">
-                <h3><%= blog.title %></h3>
-              
-               <p style="font-weight: 400;
-                opacity: 0.7;">
-                Description: <%= blog.description %>
-                <br>
-                Written by: <%= blog.authorName %>
-              </p> 
-              </a>
-            </li>
-      
-          <% }); %>
-        </ul>
-      </div>
-
-      <div id="tags" class="main">
-        <h1>Tags</h1>
-        <ul>
-          <% tags.forEach(tag => { %>
-            <li>
-              <a href="/getTag/<%= tag._id %>" tagId="<%= tag._id %>">
-              <%= tag.name %>
-            </a>
-            </li>
-          <% }); %>
-        </ul>
-      </div>
-
-      <div id="authors" class="main">
-        <h1>Authors</h1>
-        <ul>
-          <% authors.forEach(author => { %>
-            <li>
-              <a href="/getSingleAuthor/<%= author._id %>" authorId="<%= author._id %>">
-              <%= author.firstname, %>
-              <%= author.lastname %>
-            </a>
-            </li>
-          <% }); %>
-        </ul>
-      </div>
+    <div class="write_container">
+      <form action="/blogCreate"  class="form" method="post">
+        <input type="text" id="title" name="title" class="write_input" placeholder="Title" required>
+        <input type="text" id="description" name="description" class="write_input" placeholder="Description" required>
+        <textarea name="body" id="body" cols="200" rows="10" placeholder="Write your blog here..."></textarea>
+        <label for="tags">Select Tags:</label>
+        <select name="tags[]" id="tags" multiple>
+            <% tags.forEach(function(tag) { %>
+            <option value="<%= tag._id %>" class="checked" onclick="toggleCheck(this)">
+                <%= tag.name %>
+            </option>
+            <% }); %> 
+        </select>
+        <label>
+            <input type="radio" name="state" value="draft" checked> Draft
+        </label>
+        <label>
+            <input type="radio" name="state" value="published"> Published
+        </label>
+        <button type="submit" class="btn-write">Create Blog</button>
+    </form>
     </div>
     <script src="script.js"></script>
-  </body>
-</html>
+    </body>
+    </html>

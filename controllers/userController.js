@@ -95,8 +95,11 @@ exports.signin = catchAsync(async (req, res, next) => {
 //     .status(200)
 //     .json({ status: "success", msg: "Tags Gotten", data: q });
 // });
+// exports.getBlog = catchAsync( async (req, res, next) => {
+//   const q = await Blog.find({ state: "publishe"})
+// })
 
-exports.getBlog = catchAsync(async (req, res, next) => {
+exports.getBlogList = catchAsync(async (req, res, next) => {
   const author = req.body.author;
   const tags = req.body.tags;
   const blogPerPage = 20;
@@ -140,9 +143,11 @@ exports.getBlog = catchAsync(async (req, res, next) => {
       }
     );
 
-    res
-      .status(200)
-      .json({ status: "success", msg: "Blogs gotten by author", data: q });
+    // res
+    //   .status(200)
+    //   .json({ status: "success", msg: "Blogs gotten by author", data: q });
+
+    res.status(200).render('index.ejs')
   }
 
   const q = await Blog.find({ state: "published" }).sort({
