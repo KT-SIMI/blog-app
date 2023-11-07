@@ -535,3 +535,35 @@ textarea {
     font-size: 30px;
     margin: 50px 0;
 }
+
+.blog__container {
+    width: 100%;
+    height: auto;
+    padding: 0  10%;
+    margin: 0 0 20px 0;
+}
+
+.blog_main  {
+    background: #ccc;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    padding: 50px 10%; 
+    color: #000;
+}
+
+.blog_main h2 {
+    font-size: 30px;
+    margin: 50px 0;
+}
+
+.description, .body, .readingTime {
+    display: block;
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: auto;
+    padding: 20px 30px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+

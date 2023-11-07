@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog App | Write Blog</title>
     <link rel="icon" type="image/x-icon" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../style.css" />
   </head>
   <body>
     <nav class="navbar">
@@ -43,6 +43,20 @@
     </nav>
     <h1 id="home_header">Blog</h1>
 
-    <script src="script.js"></script>
+    <header>
+        <p>Hello!</p>
+      </header>
+
+      <div class="blog__container">
+        <div class="blog_main">
+            <h2><%= blog.title %></h2>
+            <p class="description"><%= blog.description %></p>
+            <p class="readingTime">Reading Time: <%= blog.readingTime %> minutes</p>
+            <p class="body"><%= blog.body %></p>
+            <p class="readCount"><%= blog.readCount %> person(s) read this</p>
+            
+        </div>
+      </div>
+    <script src="../script.js"></script>
     </body>
     </html>

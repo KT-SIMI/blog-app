@@ -54,7 +54,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.set('Content-Type', 'application/json');
+app.set("Content-Type", "application/json");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -87,7 +87,6 @@ app.get("/homepage", async (req, res) => {
     authors.push(author);
   }
 
-
   res.render("homepage.ejs", {
     blogs: blog,
     // totalPages,
@@ -110,8 +109,7 @@ app.post("/signup", async (req, res) => {
   const emailExist = await User.findOne({ email: email });
 
   if (emailExist) {
-    
-    res.status(401).send("email does not exist")
+    res.status(401).send("email does not exist");
   }
 
   const hashedPassword = await bcrypt.hash(
@@ -146,13 +144,13 @@ app.post("/login", async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(401).send("Invalid email and/or password")
+    return res.status(401).send("Invalid email and/or password");
   }
 
   const isPasswordValid = bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    return res.status(401).send("Invalid email and/or password")
+    return res.status(401).send("Invalid email and/or password");
   }
 
   const payload = { userId: user._id };
@@ -183,9 +181,9 @@ app.get("/", auth, async (req, res) => {
   // const start = (page - 1) * perPage;
   // console.log(start);
   // const end = start + perPage;
-  const blog = await Blog.find({ state: "published" })
+  const blog = await Blog.find({ state: "published" });
   // console.log(blog)
-  
+
   // .sort({
   //   readCount: -1,
   //   readingCount: -1,
@@ -207,7 +205,7 @@ app.get("/", auth, async (req, res) => {
   }
 
   // console.log(authors)
- 
+
   res.render("index.ejs", {
     blogs: blog,
     // totalPages,
@@ -247,7 +245,7 @@ app.post("/blogCreate", auth, async (req, res) => {
   // console.log(selectedTags);
 
   if (titleExists) {
-    res.status(401).render('/blogCreate');
+    res.status(401).render("/blogCreate");
   }
 
   const blog = new Blog({
@@ -279,17 +277,17 @@ app.post("/blogCreate", auth, async (req, res) => {
   );
 
   await blog.save();
-  res.set('Content-Type', 'application/json');
+  res.set("Content-Type", "application/json");
 
   res.status(200).redirect("/");
 });
 
-app.get('/profile', auth, async (req, res, next) => {
-  const UserId = req.user.userId
+app.get("/profile", auth, async (req, res, next) => {
+  const UserId = req.user.userId;
 
-  const user = await User.findOne({ _id: UserId })
+  const user = await User.findOne({ _id: UserId });
 
- const userBlogs = user.blogs
+  const userBlogs = user.blogs;
 
   const blogs = [];
 
@@ -298,33 +296,102 @@ app.get('/profile', auth, async (req, res, next) => {
     const blog = await Blog.findOne({ _id: singleBlogId });
 
     if (blog == null) {
-      await User.updateOne({ _id: user._id}, {
-        $pull: { blogs: singleBlogId }
-      })
+      await User.updateOne(
+        { _id: user._id },
+        {
+          $pull: { blogs: singleBlogId },
+        }
+      );
     }
     blogs.push(blog);
   }
 
   // console.log(blogs)
-  res.status(200).render('profile.ejs', {
+  res.status(200).render("profile.ejs", {
     user: user,
     blogs: blogs,
-  })
-})
+  });
+});
 
- app.get('/getSingleBlog/:id', async (req, res) => {
+app.get("/getSingleBlog/:id", async (req, res) => {
   const blogId = req.params.id;
 
-  const blog = await Blog.findOne({ _id: blogId })
+  const blog = await Blog.findOne({ _id: blogId });
 
-  res.status(200).render("/getSingleBlog/:id", {
+  await Blog.updateOne(
+    { _id: blog._id },
+    {
+      $inc: { readCount: 1 },
+    }
+  );
+
+  res.status(200).render("blog.ejs", {
     blog,
-  })
+  });
+});
 
-})
-// app.use("/user", userRouter);
-// app.use('/verified', auth, verifiedRouter)
+app.get("/getTag/:id", async (req, res, next) => {
+  const tagId = req.params.id;
 
+  const tag = await Tag.findOne({ _id: tagId });
+
+  const tagBlogs = tag.blogs;
+  const publishedTagBlogs = [];
+
+  for (i = 0; i < tagBlogs.length; i++) {
+    const tagBlog = tagBlogs[i];
+
+    const blog = await Blog.findOne({ _id: tagBlog });
+    // console.log(blog);
+    if (blog == null) {
+      await Tag.updateOne(
+        { _id: tagBlog },
+        {
+          $pull: { blogs: tagBlog },
+        }
+      );
+    }
+    // if (blog.state == "published") {
+    //   publishedTagBlogs.push(blog)
+    // }
+  }
+
+  res.status(200).render("tag.ejs", {
+    tag,
+    blogs: publishedTagBlogs,
+  });
+});
+
+app.get("/getAuthor/:id", async (req, res) => {
+  const authorId = req.params.id
+
+  const author = await User.findOne({ _id: authorId });
+
+  const authorBlogs = author.blogs;
+
+  const blogs = [];
+
+  for (let i = 0; i < authorBlogs.length; i++) {
+    const singleBlogId = authorBlogs[i];
+    const blog = await Blog.findOne({ _id: singleBlogId });
+
+    if (blog == null) {
+      await User.updateOne(
+        { _id: author._id },
+        {
+          $pull: { blogs: singleBlogId },
+        }
+      );
+    }
+    blogs.push(blog);
+  }
+
+  // console.log(blogs)
+  res.status(200).render("author.ejs", {
+    author,
+    blogs,
+  });
+});
 const port = 4004;
 
 app.listen(4004, () => {
