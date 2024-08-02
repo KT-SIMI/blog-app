@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog App | Profile</title>
+    <title>Blog App | Tag</title>
     <link rel="icon" type="image/x-icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css" />
   </head>
@@ -41,35 +41,32 @@
         </ul>
       </div>
     </nav>
-    <h1 id="home_header">Your Profile</h1>
-    <header>
-      <p>Hello, <%= user.firstname %></p>
-    </header>
-    <div class="profile_container">
-      <main class="profile">
-        <p class="profile_paragraph">Fullname: <%= user.firstname %>
-          <%= user.lastname %></p>
-          <p class="profile_paragraph">Email: <%= user.email %></p>
 
+    <header>
+        <p>Hello, <%= user.firstname %></p>
+      </header>
+      <div class="main_container">
+        <div id="blogs" class="main displayed">
+          <h1>Blogs</h1>
           <ul>
-            <h2>Blogs</h2>
             <% blogs.forEach(blog => { %>
-              <li class="li">
-                <a href="/views/verified/getSingleBlog/<%= blog._id %>">
+              <li>
+                <a href="/views/verified/getSingleBlog/<%= blog._id %>" class="blogs">
                   <h3><%= blog.title %></h3>
                 
                  <p style="font-weight: 400;
                   opacity: 0.7;">
-                 <%= blog.description %>
+                  Description: <%= blog.description %>
+                  <br>
+                  Written by: <%= blog.authorName %>
                 </p> 
-               <a href="/views/verified/deleteBlog" class="button">Delete Blog</a>
                 </a>
               </li>
         
             <% }); %>
           </ul>
-      </main>
-    </div>
-    <script src="/script.js"></script>
+        </div>
+        </div>
+          <script src="/script.js"></script>
     </body>
-    </html>
+</html>

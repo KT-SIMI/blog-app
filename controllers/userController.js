@@ -5,13 +5,20 @@ const jwt = require("jsonwebtoken");
 const Tag = require("../models/tagModel");
 const Blog = require("../models/blogModel");
 
-exports.signup = catchAsync(async (req, res, next) => {
+
+
+exports.getSignup = catchAsync(async (req, res) => {
+  res.status(200).render("signup")
+})
+
+
+exports.signup = catchAsync(async (req, ret) => {
   const firstname = req.body.firstname;
   const lastname = req.body.lastname;
   const email = req.body.email;
   const password = req.body.password;
 
-  const emailExits = await User.findOne({ email: email });
+  const emailExits = await User.findOne({ email });
 
   if (emailExits)
     return res
@@ -24,158 +31,161 @@ exports.signup = catchAsync(async (req, res, next) => {
   );
 
   const user = new User({
-    firstname: firstname,
-    lastname: lastname,
-    email: email,
+    firstname,
+    lastname,
+    email,
     password: hashedPassword,
   });
 
   await user.save();
 
-  const q = await User.findOne({ _id: user._id }, { password: 0 });
 
-  res.status(200).json({ status: "success", msg: "signed up", data: q });
 
-  //   res.redirect("/signin");
+  res.redirect("/views/signin");
+
 });
+
+exports.getSignin = catchAsync(async (req, res) => {
+  res.status(200).render("login")
+})
+
 
 exports.signin = catchAsync(async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-
   if (!email || !password) {
-    //   alert("Invalid email and/or password");
-    //   return res.status(400).render("/login");
     return res.status(401).json({ status: "error", msg: "Unautorized" });
   }
-
   const user = await User.findOne({ email });
-
   if (!user) {
-    //   alert("Invalid email and/or password");
-    //   return res.status(401).render("/signup");
     return res.status(401).json({ status: "error", msg: "Unautorized" });
   }
-
   const isPasswordValid = bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    //   alert("Invalid email and/or password");
-    //   return res.status(401).render("/login");
+    ;
     return res.status(401).json({ status: "error", msg: "Unautorized" });
   }
 
   const payload = { userId: user._id };
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "720h",
   });
   req.session.token = token;
 
-  const q = { user: `${user.firstname} ${user.lastname}`, email: user.email };
 
-  res.status(200).json({ status: "success", msg: "Signed in", data: q });
+  res.status(200).redirect("/views/verified/")
 });
 
-// exports.createTag = catchAsync(async (req, res, next) => {
-//   const tag = new Tag({
-//     name: req.body.name,
-//   });
 
-//   await tag.save();
+exports.getLogout = catchAsync(async (req, res) => {
+  req.session.token = null;
+  req.session.save(function (err) {
+    if (err) next(err);
 
-//   const q = await Tag.findOne({ _id: tag._id });
+    req.session.regenerate(function (err) {
+      if (err) next(err);
 
-//   res.status(200).json({ status: "success", msg: "Tag created", data: q });
-// });
+      res.redirect("/views/login");
+    });
+  });
+});
 
-// exports.getTags = catchAsync(async (req, res, next) => {
-//   const q = await Tag.find();
 
-//   res
-//     .status(200)
-//     .json({ status: "success", msg: "Tags Gotten", data: q });
-// });
-// exports.getBlog = catchAsync( async (req, res, next) => {
-//   const q = await Blog.find({ state: "publishe"})
-// })
+exports.getHome = catchAsync(async (req, res) => {
+  const blogs = await Blog.find({ state: "published" })
 
-exports.getBlogList = catchAsync(async (req, res, next) => {
-  const author = req.body.author;
-  const tags = req.body.tags;
-  const blogPerPage = 20;
-  const page = parseInt(req.query.page) || 1;
+  const tags = await Tag.find({ blogs: { $ne: [] } });
+  const blogId = []
+  const authors = [];
 
-  const numberOfBlogs = await Blog.countDocuments();
-  const skip = (page - 1) * blogPerPage;
-  if (author) {
-    const authorExists = await User.findOne({ author, state: "published" });
-
-    if (!authorExists)
-      return res
-        .status(401)
-        .json({ status: "success", msg: "Author does not exist" });
-
-    const q = await Blog.find({ author: author, state: "published" })
-      .sort({
-        readCount: -1,
-        readingCount: -1,
-        timeStamp: -1,
-      })
-      .skip(skip)
-      .limit(blogPerPage);
-
-    return res
-      .status(200)
-      .json({ status: "success", msg: "Blogs gotten by author", data: q });
-  } else if (tags) {
-    const tagExists = await Tag.findOne({ tags });
-
-    if (!tagExists)
-      return res
-        .status(404)
-        .json({ status: "success", msg: "Tag does not exist" });
-
-    const q = await Blog.find({ $in: { tags: tags }, state: "published" }).sort(
-      {
-        readCount: -1,
-        readingCount: -1,
-        timeStamp: -1,
-      }
-    );
-
-    // res
-    //   .status(200)
-    //   .json({ status: "success", msg: "Blogs gotten by author", data: q });
-
-    res.status(200).render('index.ejs')
+  function pushAuthorId(authorId) {
+    const idString = authorId.toString()
+    if (!blogId.includes(idString)) {
+      blogId.push(idString)
+    }
   }
 
-  const q = await Blog.find({ state: "published" }).sort({
-    readCount: -1,
-    readingCount: -1,
-    timeStamp: -1,
-  });
+  blogs.forEach(blog => pushAuthorId(blog.author))
 
-  res
-    .status(200)
-    .json({
-      status: "success",
-      msg: "Blogs gotten",
-      totalPages: Math.ceil(numberOfBlogs / perPage),
-      data: q,
-    });
-});
+  for (const singleBlogId of blogId) {
+    const author = await User.findOne({ _id: singleBlogId });
+    authors.push(author);
+  }
+
+
+  res.status(200).render("homepage", {
+    blogs,
+    authors,
+    tags
+  })
+})
 
 exports.getSingleBlog = catchAsync(async (req, res, next) => {
-  const BlogId = req.body.BlogId;
+  const blogId = req.params.blogId
 
-  await Blog.updateOne({ _id: BlogId }, { $inc: { readCount: 1 } });
+  const blog = await Blog.findOne({ _id: blogId })
 
-  const q = await Blog.findOne({ _id: BlogId });
+  await blog.updateOne({ $inc: { readCount: 1 } })
 
-  res.status(200).json({
-    status: "success",
-    msg: "Gotten a blog",
-    data: q,
-  });
-});
+  res.status(200).render("blog", {
+    blog
+  })
+})
+
+exports.getSingleTag = catchAsync(async (req, res) => {
+  const tagId = req.params.tagId
+
+  const tag = await Tag.findOne({ _id: tagId })
+
+  const blogs = []
+
+  const blogIds = tag.blogs
+
+
+  for (const blogId of blogIds) {
+    const blog = await Blog.findOne({ _id: blogId, state: "published" })
+
+    if (blog === null) {
+      await Tag.updateOne({ _id: tagId }, {
+        $pull: { blogs: blogId }
+      })
+    } else {
+      blogs.push(blog)
+    }
+  }
+
+  res.status(200).render("tag", {
+    tag,
+    blogs
+  })
+})
+
+exports.getSingleAuthor = catchAsync ( async (req, res) => {
+  const authorId = req.params.authorId
+
+  const author = await User.findOne({ _id: authorId })
+
+  const blogs = []
+  const blogIds = author.blogs
+
+
+  for (const blogId of blogIds) {
+    const blog = await Blog.findOne({ _id: blogId })
+
+    if (blog === null) { 
+      await User.updateOne({ _id: authorId }, { 
+        $pull: { blogs: blogId}
+      })
+    } else {
+    blogs.push(blog)
+    }
+  }
+
+  res.status(200).render("author", {
+    author,
+    blogs
+  })
+})
+
+

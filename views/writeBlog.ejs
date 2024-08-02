@@ -1,71 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog App | Write Blog</title>
-    <link rel="icon" type="image/x-icon" href="favicon.svg" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="navbar__container">
-        <a href="/" class="navbar__logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" class="bi bi-pen" viewBox="0 0 16 16">
-            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
-          </svg>
-          Blog App</a>
-        <div class="navbar__toggle" id="mobile-menu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
 
-        <ul class="navbar__menu">
-          <div class="top__bar">
-            <canvas id="draw"></canvas>
-          </div>
-          <li class="navbar__item">
-            <a href="/profile" class="navbar__links">Profile</a>
-          </li>
-          <li class="navbar__item">
-            <a href="/blogCreate" class="navbar__links">Write Blog</a>
-          </li>
-          <!-- <li class="navbar__item">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog App | Write Blog</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/views/verified/" class="navbar__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0080ff" class="bi bi-pen"
+          viewBox="0 0 16 16">
+          <path
+            d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z" />
+        </svg>
+        Blog App</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+
+      <ul class="navbar__menu">
+        <div class="top__bar">
+          <canvas id="draw"></canvas>
+        </div>
+        <li class="navbar__item">
+          <a href="/views/verified/profile" class="navbar__links">Profile</a>
+        </li>
+        <li class="navbar__item">
+          <a href="/views/verified/blogCreate" class="navbar__links">Write Blog</a>
+        </li>
+        <!-- <li class="navbar__item">
             <a href="/" class="navbar__links">My Blogs</a>
           </li> -->
 
-          <li class="navbar__btn">
-            <a href="/" class="button">Log Out</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <header>
-        <h1>Write Blog</h1>
-    </header>
-    <div class="write_container">
-      <form action="/blogCreate"  class="form" method="post">
-        <input type="text" id="title" name="title" class="write_input" placeholder="Title" required>
-        <input type="text" id="description" name="description" class="write_input" placeholder="Description" required>
-        <textarea name="body" id="body" cols="200" rows="10" placeholder="Write your blog here..."></textarea>
-        <label for="tags">Select Tags:</label>
-        <select name="tags[]" id="tags" multiple>
-            <% tags.forEach(function(tag) { %>
-            <option value="<%= tag._id %>" class="checked" onclick="toggleCheck(this)">
-                <%= tag.name %>
-            </option>
-            <% }); %> 
-        </select>
-        <label>
-            <input type="radio" name="state" value="draft" checked> Draft
-        </label>
-        <label>
-            <input type="radio" name="state" value="published"> Published
-        </label>
-        <button type="submit" class="btn-write">Create Blog</button>
-    </form>
+        <li class="navbar__btn">
+          <a href="/views/logout" class="button">Log Out</a>
+        </li>
+      </ul>
     </div>
-    <script src="script.js"></script>
-    </body>
-    </html>
+  </nav>
+  <header>
+    <h1>Write Blog</h1>
+  </header>
+  <div class="write_container">
+    <form action="/views/verified/blogCreate" class="form" method="post">
+      <input type="text" id="title" name="title" class="write_input" placeholder="Title" required>
+      <input type="text" id="description" name="description" class="write_input" placeholder="Description" required>
+      <textarea name="body" id="body" cols="200" rows="10" placeholder="Write your blog here..."></textarea>
+      <label for="tags">Select Tags:</label>
+      <div class="select">
+        <% tags.forEach(function(tag) { %>
+        <p>
+          <input type="checkbox" class="tag" name="tags" value="<%= tag._id %>">
+          <label for="tag" class="checkLabel"><%= tag.name %></label>
+        </p>
+        <% }); %> 
+      </div>
+      <label>
+        <input type="radio" name="state" value="draft" checked> Draft
+      </label>
+      <label>
+        <input type="radio" name="state" value="published"> Published
+      </label>
+      <button type="submit" class="btn-write">Create Blog</button>
+    </form>
+  </div>
+  <script src="/script.js"></script>
+</body>
+
+</html>

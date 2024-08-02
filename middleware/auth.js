@@ -39,7 +39,7 @@ const auth = (req, res, next) => {
     if (req?.user) {
       next();
     } else {
-      return res.redirect("/homepage");
+      return res.redirect("/views/");
       //   return next(new AppError(403, 'Unauthorized'));
     }
   });

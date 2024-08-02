@@ -13,16 +13,16 @@ body {
 }
 
 .navbar {
-    background: #444;
+    background: #cdc7c7;
     height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1rem;
     position: sticky;
-    top: 0;
+    /* top: 0; */
     z-index: 999;
-    top: 0;
+    
 }
 
 .navbar__container {
@@ -37,7 +37,7 @@ body {
 }
 
 .navbar__logo {
-    color: #fff;
+    color: #121212;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -61,7 +61,7 @@ body {
 }
 
 .navbar__links {
-    color: #fff;
+    color: #121212;
     display: flex;
     width: 150px;
     align-items: center;
@@ -89,12 +89,34 @@ body {
     width: 100%;
     border: none;
     outline: none;
-    border-radius: 25px;
+    border-radius: 5px;
     background: red;
     color: #fff;
 }
 
 .button:hover {
+    color: red;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.home {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 10px 30px;
+    margin: auto 0;
+    height: 62%;
+    width: 15%;
+    border: none;
+    outline: none;
+    border-radius: 9px;
+    background: red;
+    color: #fff;
+}
+
+.home:hover {
     color: red;
     transition: all 0.3s ease;
     background: #fff;
@@ -106,6 +128,21 @@ body {
 }
 
 @media screen and (max-width: 960px) {
+    .home {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        padding: 5px 15px;
+        margin: auto 0;
+        height: 60%;
+        width: 20%;
+        border: none;
+        outline: none;
+        border-radius: 9px;
+        background: red;
+        color: #fff;
+    }
     .navbar__container {
         display: flex;
         justify-content: space-between;
@@ -114,6 +151,7 @@ body {
         width: 100%;
         max-width: 1300px;
         margin: 0;
+        padding: 0;
 
 
     }
@@ -121,25 +159,26 @@ body {
     .navbar__menu {
         display: grid;
         grid-template-columns: auto;
-        margin: 0 auto;
-        width: 90%;
-        /*justify-content: center;*/
+        margin: 0;
+        width: 100%;
+        /* justify-content: center; */
         position: absolute;
         top: -1000px;
         opacity: 0;
         transition: all 0.5s ease;
         height: 60vh;
         z-index: -1;
-        padding: 0;
+        padding-top: 20px;
         background: #fff;
     }
 
     .top__bar {
-        margin: 0;
-        background-color: #444;
+        margin-top: -5.6%;
+        background-color: #cdc7c7;
         position: relative;
-        height: 55px;
-        align-content: flex-end;
+        width: 100%;
+        height: 50px;
+        align-content: center;
 
     }
 
@@ -148,14 +187,14 @@ body {
         width: 0;
         height: 0;
         border-left: 35px solid transparent;
-        border-bottom: 40px solid #fff;
+        border-bottom: 40px solid #eee;
         position: absolute;
 
         right: 0;
     }
 
     .navbar__menu.active {
-        background: #fff;
+        background: #eee;
         top: 100%;
         opacity: 1;
         transition: all 0.5 ease;
@@ -163,7 +202,7 @@ body {
         height: 50vh;
         font-size: 1.2rem;
         margin-top: 12px 0 0 0;
-        width: 90%;
+        width: 100%;
 
     }
 
@@ -176,7 +215,7 @@ body {
         height: 3px;
         margin: 5px auto 0 auto;
         transition: all 0.3s ease-in-out;
-        background: #fff;
+        background: #121212;
     }
 
     .navbar__item {
@@ -188,7 +227,7 @@ body {
         padding: 2rem;
         width: 100%;
         display: table;
-        color: hsl(213, 9%, 39%);
+        color: #121212;
 
     }
 
@@ -218,6 +257,7 @@ body {
     }
 
     .navbar__toggle .bar {
+        color: #121212;
         display: block;
         cursor: pointer;
     }
@@ -446,16 +486,28 @@ textarea {
     margin: 20px 0 20px 0
 }
 
-.form select {
+.form .select {
+    overflow: auto;
     background: #eee;
     border: 1px solid #eee;
-    height: 200px;
-    width: 100%
+    max-height: 200px;
+    width: 100%;
+    display: block
 }
-.form select option {
+
+.form .select p {
+    display: block;
     margin: 10px;
-    padding: 5px 10px;
+}
+.form .select input {
+    display: inline;
+    margin: 10px;
+    padding: 5%px 10%;
     border-radius: 5px;
+}
+
+.form .select .checkLabel {
+    display: inline
 }
 
 .form label {
@@ -556,7 +608,7 @@ textarea {
     margin: 50px 0;
 }
 
-.description, .body, .readingTime {
+.description, .readingTime {
     display: block;
     background: #fff;
     border: 1px solid #ccc;
@@ -567,3 +619,22 @@ textarea {
     margin-bottom: 10px;
 }
 
+#edit {
+    color: blue
+}
+
+#edit:hover {
+    color: red;
+    text-decoration: none;
+}
+
+.body {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #eee;
+    font-weight: 500;
+    border-radius: 10px;
+    padding: 10px 20px;
+    height: 700px;
+    font-size: 14px;
+}

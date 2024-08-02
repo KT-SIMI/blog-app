@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blog App | Profile</title>
+    <title>Blog App | Author</title>
     <link rel="icon" type="image/x-icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/style.css" />
   </head>
@@ -41,35 +41,31 @@
         </ul>
       </div>
     </nav>
-    <h1 id="home_header">Your Profile</h1>
-    <header>
-      <p>Hello, <%= user.firstname %></p>
-    </header>
-    <div class="profile_container">
-      <main class="profile">
-        <p class="profile_paragraph">Fullname: <%= user.firstname %>
-          <%= user.lastname %></p>
-          <p class="profile_paragraph">Email: <%= user.email %></p>
 
-          <ul>
-            <h2>Blogs</h2>
-            <% blogs.forEach(blog => { %>
-              <li class="li">
-                <a href="/views/verified/getSingleBlog/<%= blog._id %>">
-                  <h3><%= blog.title %></h3>
-                
-                 <p style="font-weight: 400;
-                  opacity: 0.7;">
-                 <%= blog.description %>
-                </p> 
-               <a href="/views/verified/deleteBlog" class="button">Delete Blog</a>
-                </a>
-              </li>
-        
-            <% }); %>
-          </ul>
-      </main>
-    </div>
-    <script src="/script.js"></script>
+    <header>
+        <p>Hello, <%= user.firstname %></p>
+      </header>
+      <div class="profile_container">
+        <main class="profile">
+  
+            <ul>
+              <h2>Blogs</h2>
+              <% blogs.forEach(blog => { %>
+                <li class="li">
+                  <a href="/views/verified/getSingleBlog/<%= blog._id %>">
+                    <h3><%= blog.title %></h3>
+                  
+                   <p style="font-weight: 400;
+                    opacity: 0.7;">
+                   <%= blog.description %>
+                  </p> 
+                  </a>
+                </li>
+          
+              <% }); %>
+            </ul>
+        </main>
+      </div>
+      <script src="/script.js"></script>
     </body>
-    </html>
+</html>
