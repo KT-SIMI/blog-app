@@ -20,7 +20,7 @@
           <span class="bar"></span>
           <span class="bar"></span>
         </div>
-
+        
         <ul class="navbar__menu">
           <div class="top__bar">
             <canvas id="draw"></canvas>
@@ -45,10 +45,10 @@
     <header>
       <p>Hello, <%= user.firstname %></p>
       <div class="header_links">
-      <a href="#blogs" onClick="displayTab('blogs')">Blogs</a>
-      <a href="#tags" onClick="displayTab('tags')">Tags</a>
-      <a href="#authors" onClick="displayTab('authors')">Authors</a>
-    </div>
+        <a href="#blogs" class="link active" id="blogLink" onClick="displayTab('blogs', 'blogLink')">Blogs</a>
+        <a href="#tags" class="link" id="tagLink" onClick="displayTab('tags', 'tagLink')">Tags</a>
+        <a href="#authors"  class="link" id="authorLink" onClick="displayTab('authors', 'authorLink')">Authors</a>
+      </div>
     </header>
     <div class="main_container">
       <div id="blogs" class="main displayed">

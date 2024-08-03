@@ -20,9 +20,6 @@ require("dotenv").config();
 })();
 
 const { auth } = require("./middleware/auth");
-const User = require("./models/userModel");
-const Tag = require("./models/tagModel");
-const Blog = require("./models/blogModel");
 
 const app = express();
 const sessOption = {
