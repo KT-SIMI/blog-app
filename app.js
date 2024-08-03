@@ -61,6 +61,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(session(sessOption));
 app.set("view engine", "ejs");
 
+
+app.get("/", (req, res) => {
+  res.redirect("/views/")
+})
 app.use("/views", userRouter)
 app.use("/views/verified", auth, verifiedRouter)
 
