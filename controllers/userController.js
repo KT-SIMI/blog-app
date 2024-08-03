@@ -86,7 +86,7 @@ exports.getLogout = catchAsync(async (req, res) => {
     req.session.regenerate(function (err) {
       if (err) next(err);
 
-      res.redirect("/views/login");
+      res.redirect("/views/signin");
     });
   });
 });

@@ -130,16 +130,16 @@ exports.getProfile = catchAsync(async (req, res) => {
 
   for (const blogId of blogIds) {
     const blog = await Blog.findOne({ _id: blogId })
+
     if (blog === null) {
-      await User.updateOne(
-        { _id: user._id },
-        {
-          $pull: { blogs: blogId },
-        }
-      );
+      await User.updateOne({ _id: authorId }, {
+        $pull: { blogs: blogId }
+      })
+    } else {
+      blogs.push(blog)
     }
-    blogs.push(blog)
   }
+
   res.status(200).render("profile", {
     user,
     blogs
